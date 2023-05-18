@@ -1,0 +1,28 @@
+{
+  "name": "tp1",
+  "version": "1.0.0",
+  "description": "TP1 pour le cours INF8808.",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "parcel build ./src/index.html",
+    "start": "parcel ./src/index.html --log-level=2 --port=8080",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Olivia Gélinas",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "browserslist": "^4.21.5",
+    "caniuse-lite": "^1.0.30001486",
+    "d3": "^7.8.4",
+    "parcel-bundler": "^1.8.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.4.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsdoc": "^29.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1"
+  }
+}
