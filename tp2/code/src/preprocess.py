@@ -59,8 +59,9 @@ def replace_others(my_df):
             5 for the play grouped as 'OTHER'
     '''
     df = df1 = pd.DataFrame()
+    df = my_df.copy(deep = True)
     for i in range(1,6):
-        act_i_df = my_df[my_df['Act']==i]
+        act_i_df = df[df['Act']==i]
         top5= act_i_df.sort_values(by = ['Count'],ascending = False).head(5)
         list_actors = list(top5['Player'])
         act_i_df['Player'] = [x if x in list_actors else 'OTHERS' for x in act_i_df.Player]
