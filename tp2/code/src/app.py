@@ -12,8 +12,8 @@
 
 
 import dash
-import dash_html_components as html
-import dash_core_components as dcc
+from dash import html
+from dash import dcc
 from dash.dependencies import Input, Output, State
 
 import pandas as pd
@@ -121,8 +121,9 @@ def radio_updated(mode, figure):
     '''
     # TODO : Update the figure's data and y axis, as well as the informational
     # text indicating the mode
-    new_fig = figure
-    return new_fig, ''
+    new_fig = bar_chart.draw(figure, data, mode)
+    bar_chart.update_y_axis(new_fig, mode)
+    return new_fig, mode
 
 
 data = prep_data()

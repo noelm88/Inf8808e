@@ -20,13 +20,14 @@ def init_figure():
             fig: The figure which will display the bar chart
     '''
     fig = go.Figure()
-
     # TODO : Update the template to include our new theme and set the title
 
     fig.update_layout(
+        title = "Lines per act",
         template=pio.templates['simple_white'],
         dragmode=False,
-        barmode='relative'
+        barmode='relative',
+        font=dict(color="grey")
     )
 
     return fig
@@ -43,8 +44,22 @@ def draw(fig, data, mode):
         Returns:
             fig: The figure comprising the drawn bar chart
     '''
+    
+    print('mode', mode)
     fig = go.Figure(fig)  # conversion back to Graph Object
     # TODO : Update the figure's data according to the selected mode
+        
+    if mode == 'Count':
+        fig.add_trace(go.Bar(
+                x=[0,1,2],
+                y=[3,5,6]
+            ))
+        
+    else: 
+        fig.add_trace(go.Bar(
+                x=[0,1,2],
+                y=[2,1,1]
+            ))
     return fig
 
 
