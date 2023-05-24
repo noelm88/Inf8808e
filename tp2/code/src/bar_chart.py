@@ -48,7 +48,8 @@ def draw(fig, data, mode):
     print('mode', mode)
     fig = go.Figure(fig)  # conversion back to Graph Object
     # TODO : Update the figure's data according to the selected mode
-        
+    print('data', data)
+    fig.data = []    
     if mode == 'Count':
         fig.add_trace(go.Bar(
                 x=[0,1,2],
@@ -56,6 +57,7 @@ def draw(fig, data, mode):
             ))
         
     else: 
+        
         fig.add_trace(go.Bar(
                 x=[0,1,2],
                 y=[2,1,1]

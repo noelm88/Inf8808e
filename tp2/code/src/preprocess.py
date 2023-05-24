@@ -21,7 +21,7 @@ def summarize_lines(my_df):
             my_df: The pandas dataframe containing the data from the .csv file
         Returns:
             The modified pandas dataframe containing the
-            information denescribed above.
+            information described above.
     '''
     my_df = my_df[['Act','Player']]
     
