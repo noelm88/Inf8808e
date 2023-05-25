@@ -21,7 +21,7 @@ def summarize_lines(my_df):
             my_df: The pandas dataframe containing the data from the .csv file
         Returns:
             The modified pandas dataframe containing the
-            information described above.
+            information denescribed above.
     '''
     my_df = my_df[['Act','Player']]
     
@@ -58,23 +58,23 @@ def replace_others(my_df):
             The df with all players not in the top
             5 for the play grouped as 'OTHER'
     '''
-    df = df1 = pd.DataFrame()
+    #We get the 5 actors with the most lines in the play
     df = my_df.copy(deep = True)
-    for i in range(1,6):
-        act_i_df = df[df['Act']==i]
-        top5= act_i_df.sort_values(by = ['Count'],ascending = False).head(5)
-        list_actors = list(top5['Player'])
-        act_i_df['Player'] = [x if x in list_actors else 'OTHERS' for x in act_i_df.Player]
-        df = pd.concat([df,act_i_df])
-    
-    df['Count'] = df.groupby(['Act','Player'])['Count'].transform('sum')
-    df['Percentile'] = df.groupby(['Act','Player'])['Percentile'].transform('sum')
-    my_df = df.drop_duplicates()
-    # TODO : Replace players in each act not in the top 5 by a
-    # new player 'OTHER' which sums their line count and percentage
-    
-    #now to sum up all the lines from OTHERS we do the same as before
-    
+    df['Act'] = 0
+    df['Count'] = my_df.groupby(['Player'])['Count'].transform('sum')
+    df['Percentile'] = my_df.groupby(['Player'])['Percentile'].transform('sum')
+    df = df.drop_duplicates()
+    top5 = df.sort_values(by = ['Count'],ascending = False).head(5)
+    list_actors = list(top5['Player'])
+
+    #For every actor not in the top 5 we replace its name with other
+    my_df['Player'] = [x if (x in list_actors) else 'OTHERS' for x in my_df.Player]
+
+    #We groupby and sum up all the lines by 'Others' 
+    my_df['Count'] = my_df.groupby(['Act','Player'])['Count'].transform('sum')
+    my_df['Percentile'] = my_df.groupby(['Act','Player'])['Percentile'].transform('sum')
+    my_df = my_df.drop_duplicates()
+        
     return my_df
 
 
