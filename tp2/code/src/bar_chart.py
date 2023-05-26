@@ -5,6 +5,7 @@
 
 import plotly.graph_objects as go
 import plotly.io as pio
+from template import THEME
 
 from hover_template import get_hover_template
 from modes import MODES, MODE_TO_COLUMN
@@ -45,24 +46,22 @@ def draw(fig, data, mode):
             fig: The figure comprising the drawn bar chart
     '''
     
-    print('mode', mode)
     fig = go.Figure(fig)  # conversion back to Graph Object
     # TODO : Update the figure's data according to the selected mode
-    print('data', data)
-    fig.data = []    
+    dico_color = {'Romeo' : 0, 'Juliet': 1, 'Nurse':2, 'Mercutio':3, 'Benvolio':4, 'Others':5 }
+    data['Color'] = [THEME['bar_colors'][dico_color[x]] for x in data['Player']]
+    fig.data=[]
+    
     if mode == 'Count':
-        fig.add_trace(go.Bar(
-                x=[0,1,2],
-                y=[3,5,6]
-            ))
-        
+        for player, group in data.groupby('Player'):
+            fig.add_trace(go.Bar(x=group["Act"], y=group["Count"], name=player, marker_color = group['Color'],
+            hovertemplate = get_hover_template(player, mode)))
     else: 
-        
-        fig.add_trace(go.Bar(
-                x=[0,1,2],
-                y=[2,1,1]
-            ))
+        for player, group in data.groupby('Player'):
+            fig.add_trace(go.Bar(x=group["Act"], y=group["Percentile"], name=player, marker_color = group['Color'],
+            hovertemplate = get_hover_template(player, mode)))
     return fig
+
 
 
 def update_y_axis(fig, mode):
@@ -75,4 +74,13 @@ def update_y_axis(fig, mode):
         Returns: 
             The updated figure
     '''
+    if mode == 'Count' :
+        fig.update_layout(legend_title_text = "Player")
+        fig.update_xaxes(title_text="Act")
+        fig.update_yaxes(title_text="Lines (Count)")
+    else:
+        fig.update_layout(legend_title_text = "Player")
+        fig.update_xaxes(title_text="Act")
+        fig.update_yaxes(title_text="Lines (%)")
+
     # TODO : Update the y axis title according to the current mode

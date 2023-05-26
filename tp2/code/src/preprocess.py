@@ -88,5 +88,6 @@ def clean_names(my_df):
     '''
     # TODO : Clean the player names
     my_df['Player'] = [x.capitalize() for x in my_df.Player]
+    my_df = my_df.reset_index(drop=True)
     # each name is already starting with a capital letter
     return my_df
