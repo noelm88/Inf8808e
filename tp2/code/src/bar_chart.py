@@ -54,12 +54,12 @@ def draw(fig, data, mode):
     
     if mode == 'Count':
         for player, group in data.groupby('Player'):
-            fig.add_trace(go.Bar(x=group["Act"], y=group["Count"], name=player, marker_color = group['Color'],
-            hovertemplate = get_hover_template(player, mode)))
+            fig.add_trace(go.Bar(x=group["Act"], y=group["Count"], name=player, marker_color = group['Color'], #hovertext= 
+            hovertemplate = get_hover_template(player, mode), hoverlabel= dict(bgcolor = 'white', font_size = 24, font_family = "Grenze Gotish", font_color = 'black')))
     else: 
         for player, group in data.groupby('Player'):
             fig.add_trace(go.Bar(x=group["Act"], y=group["Percentile"], name=player, marker_color = group['Color'],
-            hovertemplate = get_hover_template(player, mode)))
+            hovertemplate = get_hover_template(player, mode), hoverlabel= dict(bgcolor = 'white', font_size = 24, font_family = "Grenze Gotish", font_color = 'black') ))
     return fig
 
 

@@ -27,12 +27,17 @@ def get_hover_template(name, mode):
     '''
     # TODO: Generate and return the over template
     if mode == MODES['count']:
-        template = "Player=%s<br><br>Count=%%{y}<extra></extra>"% name
+        template = "<br>%s</br><br><br>%%{y} lines<extra></extra>"% name
         
-    else: template = "Player=%s<br><br>Percentile=%%{y:.2f}<extra></extra>"% name    
+    else: template = "%s<br><br>%%{y:.2f} %% of lines<extra></extra>"% name    
     
     
     return template
 #
-
+hovertemplate='<br>'.join([
+            'Price: $%{y:.2f}',
+            'Week: %{x}',
+            'Field A: %{customdata[0]}',
+            'Field B: %{customdata[1]}',
+        ]),
 #
