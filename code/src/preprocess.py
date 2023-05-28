@@ -103,6 +103,7 @@ def get_daily_info(dataframe, arrond, year):
     #We add a count column to the dataframe
     df = dataframe.loc(dataframe['Arrond_Nom']==arrond)
     df['Count'] = df.groupby(['Date_Plantation'])['Date_Plantation'].transform('count')
+    start = datetime(year,1,1,0,0,0,0,None)
     end = datetime(year+1,1,1,0,0,0,0,None)
     currentdate = start
     Daily_Plantation = []
