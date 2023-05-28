@@ -4,7 +4,7 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime
-
+from datetime import timedelta
 def convert_dates(df):
     '''
         Converts the dates in the dataframe to datetime objects.
@@ -35,7 +35,6 @@ def filter_years(df, start, end):
     startY = datetime(year = start, month=1, day=1)
     endY = datetime(year = end+1, month=1, day=1)
     df = df.loc[(df['Date_Plantation'] >= startY) & (df['Date_Plantation'] < endY)]
-    print(df)
     return df
 
 
@@ -101,5 +100,16 @@ def get_daily_info(dataframe, arrond, year):
             The daily tree count data for that
             neighborhood and year.
     '''
-    # TODO : Get daily tree count data and return
-    return None
+    #We add a count column to the dataframe
+    df = dataframe.loc(dataframe['Arrond_Nom']==arrond)
+    df['Count'] = df.groupby(['Date_Plantation'])['Date_Plantation'].transform('count')
+    end = datetime(year+1,1,1,0,0,0,0,None)
+    currentdate = start
+    Daily_Plantation = []
+    while currentdate<end :
+        if not(currentdate in df['Date_Plantation'].values):
+            Daily_Plantation.append(0)
+        else :
+            count = df.loc(df['Date_Plantation'] == currentdate)['Count'].head(1)
+            Daily_Plantation.append(count)
+    return np.array(Daily_Plantation)
