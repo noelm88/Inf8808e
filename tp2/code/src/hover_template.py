@@ -33,11 +33,3 @@ def get_hover_template(name, mode):
     
     
     return template
-#
-'''hovertemplate='<br>'.join([
-            'Price: $%{y:.2f}',
-            'Week: %{x}',
-            'Field A: %{customdata[0]}',
-            'Field B: %{customdata[1]}',
-        ]),'''
-#
