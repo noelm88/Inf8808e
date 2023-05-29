@@ -2,7 +2,6 @@
     Contains some functions related to the creation of the heatmap.
 '''
 import plotly.express as px
-from hover_template import get_linechart_hover_template
 from hover_template import get_heatmap_hover_template
 
 def get_figure(data):
@@ -19,11 +18,8 @@ def get_figure(data):
             The figure to be displayed.
     '''
     print(data)
-    fig = px.imshow(data, template = 'plotly_white')
+    fig = px.imshow(data, template = "plotly_white")
     fig.update_traces(hovertemplate= get_heatmap_hover_template())
-    fig.update_layout(xaxis={'title': 'Years'}, yaxis={'title': 'Neighbourhoods'})
-    fig.show()
+    return fig
     # TODO : Create the heatmap. Make sure to set dragmode=False in
     # the layout. Also don't forget to include the hover template.
-
-    return None

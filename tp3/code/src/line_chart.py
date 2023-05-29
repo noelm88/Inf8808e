@@ -15,11 +15,14 @@ def get_empty_figure():
         in the heatmap for more information.
 
     '''
-
+    fig = px.line()
+    fig.update_layout(dragmode = False)
     # TODO : Construct the empty figure to display. Make sure to 
     # set dragmode=False in the layout.
-    return None
+    
 
+    fig.add_annotation(dict(text="No data to display. Select a cell in the heatmap for more information."))
+    return(fig)
 
 def add_rectangle_shape(fig):
     '''
@@ -31,7 +34,10 @@ def add_rectangle_shape(fig):
         paper of the figure. The height goes from
         0.25% to 0.75% the height of the figure.
     '''
-    # TODO : Draw the rectangle
+    fig.add_shape(
+        type="rect",
+        fillcolor=THEME['pale_color'],
+    )
     return None
 
 
