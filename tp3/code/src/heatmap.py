@@ -3,7 +3,7 @@
 '''
 import plotly.express as px
 from hover_template import get_heatmap_hover_template
-
+import plotly.graph_objects as go
 def get_figure(data):
     '''
         Generates the heatmap from the given dataset.
@@ -17,9 +17,16 @@ def get_figure(data):
         Returns:
             The figure to be displayed.
     '''
-    print(data)
     fig = px.imshow(data, template = "plotly_white")
     fig.update_traces(hovertemplate= get_heatmap_hover_template())
+    fig.update_layout(
+        dragmode = False,
+        xaxis=go.layout.XAxis(title ='Year'
+            ),
+        yaxis=go.layout.YAxis(title = 'Neighbourhood'
+            )
+        )
+    
     return fig
     # TODO : Create the heatmap. Make sure to set dragmode=False in
     # the layout. Also don't forget to include the hover template.

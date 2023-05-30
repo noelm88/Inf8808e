@@ -3,7 +3,7 @@
 '''
 import plotly.express as px
 import hover_template
-
+import plotly.graph_objects as go
 from template import THEME
 
 
@@ -21,7 +21,13 @@ def get_empty_figure():
     # set dragmode=False in the layout.
     
 
-    fig.add_annotation(dict(text="No data to display. Select a cell in the heatmap for more information."))
+    fig.add_annotation(dict(showarrow = False,text="No data to display. Select a cell in the heatmap for more information."))
+    fig.update_layout(
+        xaxis=go.layout.XAxis(title ='Day of plantation'
+            ),
+        yaxis=go.layout.YAxis(title = 'Number of trees planted'
+            )
+        )
     return(fig)
 
 def add_rectangle_shape(fig):
@@ -62,5 +68,11 @@ def get_figure(line_data, arrond, year):
         Returns:
             The figure to be displayed
     '''
-    # TODO : Construct the required figure. Don't forget to include the hover template
-    return None
+    fig = px.line(line_data)
+    fig.update_layout(
+        xaxis=go.layout.XAxis(title ='{} - {}'.format(arrond,year)
+            ),
+        yaxis=go.layout.YAxis(title = 'Trees'
+            )
+        )
+    return fig

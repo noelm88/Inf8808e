@@ -106,11 +106,15 @@ def get_daily_info(dataframe, arrond, year):
     start = datetime(year,1,1,0,0,0,0,None)
     end = datetime(year+1,1,1,0,0,0,0,None)
     currentdate = start
+    Days = []
     Daily_Plantation = []
     while currentdate<end :
+        Days.append(currentdate)
         if not(currentdate in df['Date_Plantation'].values):
             Daily_Plantation.append(0)
         else :
             count = df.loc(df['Date_Plantation'] == currentdate)['Count'].head(1)
             Daily_Plantation.append(count)
-    return np.array(Daily_Plantation)
+        currentdate = currentdate + timedelta(days = 1)
+    data = pd.DataFrame({'days' : Days, 'Trees': Daily_Plantation})
+    return (data)

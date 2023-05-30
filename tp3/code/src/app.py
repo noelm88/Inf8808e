@@ -100,7 +100,6 @@ def heatmap_clicked(click_data):
         dataframe,
         arrond,
         year)
-
     line_fig = line_chart.get_figure(line_data, arrond, year)
 
     return line_fig
