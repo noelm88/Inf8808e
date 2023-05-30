@@ -2,7 +2,7 @@
     Contains some functions related to the creation of the line chart.
 '''
 import plotly.express as px
-import hover_template
+from hover_template import get_linechart_hover_template
 import plotly.graph_objects as go
 from template import THEME
 
@@ -68,11 +68,12 @@ def get_figure(line_data, arrond, year):
         Returns:
             The figure to be displayed
     '''
-    fig = px.line(line_data)
+    year = year[:4]
+    fig = px.line(line_data, x=line_data['Date_Plantation'], y =line_data['Count'])
+    fig.update_traces(hovertemplate= get_linechart_hover_template())
     fig.update_layout(
-        xaxis=go.layout.XAxis(title ='{} - {}'.format(arrond,year)
-            ),
-        yaxis=go.layout.YAxis(title = 'Trees'
-            )
+        title ={'text':'Trees planted in {} - {}'.format(arrond,year)},
+        xaxis=go.layout.XAxis(title = ''),
+        yaxis=go.layout.YAxis(title = 'Trees')
         )
     return fig

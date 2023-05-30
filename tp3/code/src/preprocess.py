@@ -38,7 +38,7 @@ def filter_years(df, start, end):
     return df
 
 
-def summarize_yearly_counts(df):
+def summarize_yearly_counts(my_df):
     '''
         Groups the data by neighborhood and year,
         summing the number of trees planted in each neighborhood
@@ -51,7 +51,7 @@ def summarize_yearly_counts(df):
             containing the counts of planted
             trees for each neighborhood each year.
     '''
-    
+    df = my_df.copy(deep = True)
     # first we put all the date to the year they correspond to
     df['Date_Plantation'] = [datetime(x.year,12,31,0,0,0,0,None) for x in df['Date_Plantation']]
     # then we do a count by arrond and year of plantation
@@ -100,21 +100,19 @@ def get_daily_info(dataframe, arrond, year):
             The daily tree count data for that
             neighborhood and year.
     '''
-    #We add a count column to the dataframe
-    df = dataframe.loc(dataframe['Arrond_Nom']==arrond)
+    #We select the data from the arrond and the selected year
+    year = int(year[:4])
+    dataframe['Date_Plantation']
+    start = datetime(year = year, month=1, day=1)
+    end = datetime(year = year+1, month=1, day=1)
+    df = dataframe.loc[(dataframe['Arrond_Nom']==arrond)]
+    df = df.loc[(df['Date_Plantation'] >= start) & (df['Date_Plantation'] < end)]
+    df = df[['Arrond_Nom','Date_Plantation']]
+    #We add a count column
     df['Count'] = df.groupby(['Date_Plantation'])['Date_Plantation'].transform('count')
-    start = datetime(year,1,1,0,0,0,0,None)
-    end = datetime(year+1,1,1,0,0,0,0,None)
-    currentdate = start
-    Days = []
-    Daily_Plantation = []
-    while currentdate<end :
-        Days.append(currentdate)
-        if not(currentdate in df['Date_Plantation'].values):
-            Daily_Plantation.append(0)
-        else :
-            count = df.loc(df['Date_Plantation'] == currentdate)['Count'].head(1)
-            Daily_Plantation.append(count)
-        currentdate = currentdate + timedelta(days = 1)
-    data = pd.DataFrame({'days' : Days, 'Trees': Daily_Plantation})
-    return (data)
+    df = df.drop_duplicates()[['Date_Plantation','Count']]
+    df = df.sort_values(by = 'Date_Plantation',ascending = True)
+    df = df.reset_index()
+    r = pd.date_range(start=df['Date_Plantation'].min(), end=df['Date_Plantation'].max())
+    df = df.set_index('Date_Plantation').reindex(r).fillna(0.0).rename_axis('Date_Plantation').reset_index()
+    return (df)

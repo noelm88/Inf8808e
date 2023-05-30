@@ -1,0 +1,57 @@
+body {
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+button {
+    padding: 10px 30px;
+    color: #000;
+    background-color: #fff;
+    border: 1px solid #333;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: 0;
+    font-family: 'Helvetica', 'sans-serif';
+    font-size: 16px;
+}
+
+button:hover, button:active {
+	background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+	background-color:#f6f6f6;
+}
+
+.row {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel-div {
+    justify-content: start;
+    height: 725px;
+    width: 215px;
+}
+
+#panel {
+    background-color: white;
+    position: relative;
+    left: -215px;
+}
+
+#close-button, #theme {
+    font-family: 'Open Sans Condensed';
+}
+
+#marker-title, #mode {
+    font-family: 'Oswald';
+}
+
+#theme {
+    padding-top: 25px;
+}
