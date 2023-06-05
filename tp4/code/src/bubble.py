@@ -107,6 +107,9 @@ def update_template(fig):
             The updated figure
     '''
     # TODO : Update template
+    fig.update_layout(
+        template = 'simple_white'
+        )
     return fig
 
 
@@ -119,5 +122,8 @@ def update_legend(fig):
         Returns:
             The updated figure
     '''
+    fig.update_layout(
+        legend_title = 'Legend'
+        )
     # TODO : Update legend
     return fig
