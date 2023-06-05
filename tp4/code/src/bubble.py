@@ -3,7 +3,7 @@
 '''
 
 import plotly.express as px
-
+import plotly.graph_objects as go
 import hover_template
 
 
@@ -43,6 +43,7 @@ def get_plot(my_df, gdp_range, co2_range):
                       size =df['Size'],
                       size_max = 30,
                       color_discrete_sequence=px.colors.qualitative.Set1,
+                      hover_name = df['Country Name']
                       )
     
     return fig
@@ -74,6 +75,7 @@ def update_animation_menu(fig):
             The updated figure
     '''
     # TODO : Update animation menu
+
     return fig
 
 
@@ -87,6 +89,10 @@ def update_axes_labels(fig):
             The updated figure
     '''
     # TODO : Update labels
+    fig.update_layout(
+        xaxis_title="GDP per capita ($ USD)",
+        yaxis_title="CO2 emissions per capita (metric tonnes)"
+        )
     return fig
 
 
