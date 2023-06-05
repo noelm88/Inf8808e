@@ -27,7 +27,25 @@ def get_plot(my_df, gdp_range, co2_range):
             The generated figure
     '''
     # TODO : Define figure with animation
-    return None
+    df=my_df.copy(deep=True)
+    min_pop = df.min()['Population']
+    max_pop = df.max()['Population']
+    df['Size'] = (((df['Population']-min_pop)/(max_pop-min_pop))*24)+6
+    fig  = px.scatter(df,
+                      x=df['GDP'],
+                      y=df['CO2'],
+                      animation_frame=df['Year'],
+                      log_x = True,
+                      log_y = True, 
+                      range_x=gdp_range,
+                      range_y=co2_range,
+                      color=df['Continent'],
+                      size =df['Size'],
+                      size_max = 30,
+                      color_discrete_sequence=px.colors.qualitative.Set1,
+                      )
+    
+    return fig
 
 
 def update_animation_hover_template(fig):
@@ -43,8 +61,7 @@ def update_animation_hover_template(fig):
     '''
 
     # TODO : Set the hover template
-    return None
-
+    return fig
 
 def update_animation_menu(fig):
     '''
@@ -57,7 +74,7 @@ def update_animation_menu(fig):
             The updated figure
     '''
     # TODO : Update animation menu
-    return None
+    return fig
 
 
 def update_axes_labels(fig):
@@ -70,7 +87,7 @@ def update_axes_labels(fig):
             The updated figure
     '''
     # TODO : Update labels
-    return None
+    return fig
 
 
 def update_template(fig):
@@ -84,7 +101,7 @@ def update_template(fig):
             The updated figure
     '''
     # TODO : Update template
-    return None
+    return fig
 
 
 def update_legend(fig):
@@ -97,4 +114,4 @@ def update_legend(fig):
             The updated figure
     '''
     # TODO : Update legend
-    return None
+    return fig
