@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 import hover_template
 
 
-def get_plot(my_df, gdp_range, co2_range):
+def get_plot(df, gdp_range, co2_range):
     '''
         Generates the bubble plot.
 
@@ -27,10 +27,10 @@ def get_plot(my_df, gdp_range, co2_range):
             The generated figure
     '''
     # TODO : Define figure with animation
-    df=my_df.copy(deep=True)
-    min_pop = df.min()['Population']
-    max_pop = df.max()['Population']
-    df['Size'] = (((df['Population']-min_pop)/(max_pop-min_pop))*24)+6
+    #df=my_df.copy(deep=True)
+    #min_pop = df.min()['Population']
+    #max_pop = df.max()['Population']
+    #df['Size'] = (((df['Population']-min_pop)/(max_pop-min_pop))*24)+6"
     fig  = px.scatter(df,
                       x=df['GDP'],
                       y=df['CO2'],
@@ -40,12 +40,12 @@ def get_plot(my_df, gdp_range, co2_range):
                       range_x=gdp_range,
                       range_y=co2_range,
                       color=df['Continent'],
-                      size =df['Size'],
+                      size =df['Population'],
                       size_max = 30,
                       color_discrete_sequence=px.colors.qualitative.Set1,
                       hover_name = df['Country Name']
                       )
-    
+    fig.update_traces(marker_sizemin = 6)
     return fig
 
 
