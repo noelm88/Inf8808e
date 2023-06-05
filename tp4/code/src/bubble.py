@@ -4,7 +4,7 @@
 
 import plotly.express as px
 import plotly.graph_objects as go
-import hover_template
+from hover_template import get_bubble_hover_template
 
 
 def get_plot(df, gdp_range, co2_range):
@@ -43,7 +43,8 @@ def get_plot(df, gdp_range, co2_range):
                       size =df['Population'],
                       size_max = 30,
                       color_discrete_sequence=px.colors.qualitative.Set1,
-                      hover_name = df['Country Name']
+                      #hover_name = df['Country Name'],
+                      hover_data = ['Country Name','Population','GDP','CO2'],
                       )
     fig.update_traces(marker_sizemin = 6)
     return fig
@@ -60,8 +61,9 @@ def update_animation_hover_template(fig):
         Returns:
             The updated figure
     '''
-
-    # TODO : Set the hover template
+    
+    # Set the hover template
+    fig.update_traces(hovertemplate = get_bubble_hover_template())
     return fig
 
 def update_animation_menu(fig):
