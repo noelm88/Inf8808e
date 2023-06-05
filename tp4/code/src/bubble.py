@@ -45,6 +45,7 @@ def get_plot(df, gdp_range, co2_range):
                       color_discrete_sequence=px.colors.qualitative.Set1,
                       #hover_name = df['Country Name'],
                       hover_data = ['Country Name','Population','GDP','CO2'],
+                      custom_data = ['Country Name','Population','GDP','CO2'],
                       )
     fig.update_traces(marker_sizemin = 6)
     return fig
