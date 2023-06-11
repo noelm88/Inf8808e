@@ -24,11 +24,12 @@ def to_df(data):
         Returns:
             my_df: The corresponding dataframe
     '''
-    # TODO : Convert JSON formatted data to dataframe
-    return None
+    #convert a geojson with nested lists to a panda dataframe
+    df = pd.DataFrame.from_dict(pd.json_normalize(data['features']),orient='columns')
+    return df
 
 
-def update_titles(my_df):
+def update_titles(df):
     '''
         Updates the column "TYPE_SITE_INTERVENTION" with corresponding
         values from the 'TITLES' dictionary (above).
@@ -39,11 +40,12 @@ def update_titles(my_df):
             my_df: The dataframe with the appropriate replacements
                 made according to the 'TITLES' dictionary
     '''
-    # TODO : Update the titles
-    return None
+    #Update the titles
+    df['properties.TYPE_SITE_INTERVENTION'].replace(TITLES, inplace = True)
+    return df
 
 
-def sort_df(my_df):
+def sort_df(df):
     '''
         Sorts the dataframe by the column "TYPE_SITE_INTERVENTION" in
         alphabetical order.
@@ -53,8 +55,11 @@ def sort_df(my_df):
         Returns:
             my_df: The sorted dataframe
     '''
-    # TODO : Sort the df
-    return None
+    #Sort the df
+    df = df.sort_values(['properties.NOM_PROJET'],ascending=False).groupby('properties.TYPE_SITE_INTERVENTION')
+    print(df['properties.NOM_PROJET'])
+    
+    return df
 
 
 def get_neighborhoods(montreal_data):
@@ -67,5 +72,7 @@ def get_neighborhoods(montreal_data):
             locations: An array containing the names of the
                 neighborhoods in the data set
     '''
-    # TODO : Return the array of neighborhoods
-    return None
+    df = pd.DataFrame.from_dict(pd.json_normalize(montreal_data['features']),orient='columns')
+    Locations = df["properties.NOM"].unique()
+    #Return the array of neighborhoods
+    return Locations
