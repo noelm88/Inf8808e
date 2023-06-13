@@ -56,9 +56,8 @@ def sort_df(df):
             my_df: The sorted dataframe
     '''
     #Sort the df
-    df = df.sort_values(['properties.NOM_PROJET'],ascending=False).groupby('properties.TYPE_SITE_INTERVENTION')
-    print(df['properties.NOM_PROJET'])
-    
+    df = df.sort_values(['properties.TYPE_SITE_INTERVENTION','properties.NOM_PROJET'],ascending=False)
+    df.reset_index(inplace=True)
     return df
 
 
