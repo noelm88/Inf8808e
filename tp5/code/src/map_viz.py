@@ -30,7 +30,7 @@ def add_choro_trace(fig, montreal_data, locations, z_vals, colorscale):
             fig: The updated figure with the choropleth trace
 
     '''
-    # TODO : Draw the map base
+    #Draw the map base
     df = pd.DataFrame.from_dict(pd.json_normalize(montreal_data['features']),orient='columns')
     fig = px.choropleth(df, 
                         geojson=montreal_data, 
@@ -42,9 +42,12 @@ def add_choro_trace(fig, montreal_data, locations, z_vals, colorscale):
                         hover_data = ['properties.NOM'],
                         custom_data = ['properties.NOM'],
                     )
+    #hide the colorbar
     fig.update(layout_coloraxis_showscale=False)
+    #center the map and set it's background to the right opacity
     fig.update_geos(fitbounds="locations")
     fig.update_traces(marker_opacity=0.2, selector=dict(type='choropleth'))
+    #set the hovertemplate
     fig.update_traces(hovertemplate = hover.map_base_hover_template())
     return fig
 
@@ -63,6 +66,7 @@ def add_scatter_traces(fig, street_df):
             The figure now containing the scatter trace
 
     '''
+    #create a scatter plot
     fig1 = px.scatter_geo(
         street_df,
         lat=street_df['properties.LATITUDE'],
@@ -72,7 +76,9 @@ def add_scatter_traces(fig, street_df):
         custom_data = ['properties.TYPE_SITE_INTERVENTION']
         )
     fig1.update_traces(marker={'size':20})
+    #set the hovertemplate
     fig1.update_traces(hovertemplate = hover.map_marker_hover_template())
+    #add the traces to the original fig (the cloropleth map)
     for i in range(len(fig1.data)):
         fig.add_trace(fig1.data[i])
     return fig
