@@ -5,7 +5,8 @@
 
 import plotly.graph_objects as go
 import plotly.express as px
-import pandas as pd 
+import pandas as pd
+
 import hover_template as hover
 
 
@@ -41,6 +42,7 @@ def add_choro_trace(fig, montreal_data, locations, z_vals, colorscale):
                         hover_data = ['properties.NOM'],
                         custom_data = ['properties.NOM'],
                     )
+    fig.update(layout_coloraxis_showscale=False)
     fig.update_geos(fitbounds="locations")
     fig.update_traces(marker_opacity=0.2, selector=dict(type='choropleth'))
     fig.update_traces(hovertemplate = hover.map_base_hover_template())
@@ -61,18 +63,16 @@ def add_scatter_traces(fig, street_df):
             The figure now containing the scatter trace
 
     '''
-    #Add the scatter markers to the map base
-    print(street_df['properties.TYPE_SITE_INTERVENTION'])
-    print(street_df)
     fig1 = px.scatter_geo(
         street_df,
         lat=street_df['properties.LATITUDE'],
         lon=street_df['properties.LONGITUDE'],
         color = street_df['properties.TYPE_SITE_INTERVENTION'],
         hover_data = ['properties.TYPE_SITE_INTERVENTION'],
-        custom_data = ['properties.TYPE_SITE_INTERVENTION'],
+        custom_data = ['properties.TYPE_SITE_INTERVENTION']
         )
-    fig1.update_traces(hovertemplate = hover.map_marker_hover_template()) 
+    fig1.update_traces(marker={'size':20})
+    fig1.update_traces(hovertemplate = hover.map_marker_hover_template())
     for i in range(len(fig1.data)):
         fig.add_trace(fig1.data[i])
     return fig

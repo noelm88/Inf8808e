@@ -56,7 +56,7 @@ def sort_df(df):
             my_df: The sorted dataframe
     '''
     #Sort the df
-    df = df.sort_values(['properties.TYPE_SITE_INTERVENTION','properties.NOM_PROJET'],ascending=False)
+    df = df.sort_values(['properties.TYPE_SITE_INTERVENTION','properties.NOM_PROJET'])
     df.reset_index(inplace=True)
     return df
 
