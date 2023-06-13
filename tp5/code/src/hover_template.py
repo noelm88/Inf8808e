@@ -13,10 +13,13 @@ def map_base_hover_template():
             The hover template.
     '''
     # TODO : Generate the hover template
-    return ''
+    #name= geojson['properties.NOM']
+    font = 'Oswald'
+    str = '<span style = "font-family: {font} "> %{customdata[0]} </span><extra></extra>'
+    return str
 
 
-def map_marker_hover_template(name):
+def map_marker_hover_template():
     '''
         Sets the template for the hover tooltips on the markers.
 
@@ -28,4 +31,6 @@ def map_marker_hover_template(name):
             The hover template.
     '''
     # TODO : Generate the hover template
-    return ''
+    font = 'Oswald'
+    str = '<span style = "font-family: {font} "> %{customdata[0]} </span><extra></extra>'
+    return str
