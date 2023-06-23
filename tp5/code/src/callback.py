@@ -18,7 +18,7 @@ def no_clicks(style):
             style: The updated display style for the panel
     '''
     # TODO : Handle no clicks on the map
-    return None, None, None, None
+    return None, None, None, style
 
 
 def map_base_clicked(title, mode, theme, style):
