@@ -65,7 +65,20 @@ def get_municipal_site_data(sites_df,towns_geojson,town_name='Nishigo Mura'):
     this function select the sites belonging to a municipality 
     it also returns the center point of said town
     '''
+    #provide a more extensive descrition of the type of site
+    hoverdict={'solar_still':'solar pannels installed before 07/2022',
+               'solar_new':'solar pannels installed since 07/2022',
+               'solar_removed':'solar pannels removed since 07/2022',
+               'waste_new':'waste disposal areas installed since 07/2022',
+               'waste_still':'waste disposal areas installed before 07/2022',
+               'waste_removed':'waste disposal areas removed since 07/2022'
+               }
+    
+    #We select only the sites which are in selected municipality
     df = sites_df.loc[sites_df['Municipality']==town_name]
+    df['Description']=[hoverdict[x] for x in df['Site_type']]
+    
+    #We get the center point of the town we want to look at
     geo_df = pd.DataFrame.from_dict(pd.json_normalize(towns_geojson['features']),orient='columns')
     geo_df = geo_df.loc[geo_df['properties.ward_en']==town_name]
     points = geo_df.iat[0,-1][0]
@@ -76,11 +89,12 @@ def get_municipal_site_data(sites_df,towns_geojson,town_name='Nishigo Mura'):
     return( df, center)
 
 def get_municipal_stat_data(df, town_name):
+    
     df=df.loc[df['Municipality']==town_name]
     df['Area_m2'] = df.groupby(['Site_type'])['Area_m2'].transform('sum')
     df = df[['Site_type', 'Area_m2']].drop_duplicates()
     year = {'solar2022':'2022','solar2023':'2023','waste2022':'2022', 'waste2023':'2023'}
-    site_type = {'solar2022':'solar','solar2023':'solar','waste2022':'waste', 'waste2023':'waste'}
+    site_type = {'solar2022':'solar pannels','solar2023':'solar pannels','waste2022':'waste disposal areas', 'waste2023':'waste disposal areas'}
     df['Year']=[year[x] for x in df['Site_type']]
     df['Site_type']=[site_type[x] for x in df['Site_type']]
     return df
@@ -90,7 +104,7 @@ def get_global_stat_data(my_df):
     df['Area_m2'] = df.groupby(['Site_type'])['Area_m2'].transform('sum')
     df = df[['Site_type', 'Area_m2']].drop_duplicates()
     year = {'solar2022':'2022','solar2023':'2023','waste2022':'2022', 'waste2023':'2023'}
-    site_type = {'solar2022':'solar','solar2023':'solar','waste2022':'waste', 'waste2023':'waste'}
+    site_type = {'solar2022':'solar pannels','solar2023':'solar pannels','waste2022':'waste disposal areas', 'waste2023':'waste disposal areas'}
     df['Year']=[year[x] for x in df['Site_type']]
     df['Site_type']=[site_type[x] for x in df['Site_type']]
     print(df)

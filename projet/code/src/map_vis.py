@@ -20,25 +20,28 @@ def get_map(df,geojson_data,colorscale,type_site,title):
                         hover_data = [type_site],
                         custom_data = [df.index,type_site],
                         hover_name= df.index,
-                        title = title
+                        title = title,
                         )
 
     #center the map
-    fig.update_layout(coloraxis_colorbar_title_text = '<b>m²</b>')
+    fig.update_layout(coloraxis_colorbar_title_text = '<b>m²</b>',
+                      height = 600,
+                      width = 600)
     fig.update_layout(dragmode = False)
     fig.update_geos(fitbounds="locations",
                     visible=False)
     fig.update_traces(hovertemplate = "<b>%{customdata[0]}</b><br> %{customdata[1]} m²")
     return fig
 
-def get_empty_figure():
+def get_empty_figure(name):
     '''
         Returns the figure to display when there is no data to show.
 
     '''
+    text = name + "No data to display. Select a municipality on the maps for more information."
     fig = px.line()
     fig.update_layout(dragmode = False)
-    fig.add_annotation(dict(showarrow = False,text="No data to display. Select a cell in the heatmap for more information."))
+    fig.add_annotation(dict(showarrow = False,text=text))
     fig.add_shape(
         type="rect",
         fillcolor="LightGray",
@@ -46,12 +49,18 @@ def get_empty_figure():
     return(fig)
 
 def get_scatter_plot(sites_df,center,town_name,towns_data):
-    my_colorscale = {'solar_new':'#16FF32','solar_still':'#479B55',
-                     'solar_removed':'#325A9B','waste_new':'#FD3216',
-                     'waste_still':'#FF9619','waste_removed':'#9D755D'}
+    #this is the custom colorscale for the sites
+    my_colorscale = {'solar pannels installed since 07/2022':'#16FF32',
+                     'solar pannels installed before 07/2022':'#479B55',
+                     'solar pannels removed since 07/2022':'#325A9B',
+                     'waste disposal areas installed since 07/2022':'#FD3216',
+                     'waste disposal areas installed before 07/2022':'#FF9619',
+                     'waste disposal areas removed since 07/2022':'#9D755D'}
+    
+    # We create a cloropleth map that highights the town we want to display
     Municipal_df = pd.DataFrame.from_dict(pd.json_normalize(towns_data['features']),orient='columns')
     Municipal_df['colors']=[0 if (x==town_name) else 1 for x in Municipal_df['properties.ward_en']]
-    title = "Evolution of the solar and waste disposal sites in " +town_name
+    title = "Evolution of the solar and waste disposal sites <br> in " +town_name
     fig_town = px.choropleth(Municipal_df, 
                     geojson=towns_data, 
                     locations= 'properties.ward_en', 
@@ -60,38 +69,62 @@ def get_scatter_plot(sites_df,center,town_name,towns_data):
                     labels= 'properties.ward_en',
                     color_continuous_scale = 'greys',
                     hover_name= 'properties.ward_en',
-                    title = title
+                    title = title,
+                    custom_data=['properties.ward_en']
                     )
     #we update the layout so that it is centered on town_name
     fig_town.update(layout_coloraxis_showscale=False)
-    fig_town.update_layout(dragmode = False)
-    fig_town.update_traces(marker_opacity=0.2, selector=dict(type='choropleth'))
+    fig_town.update_layout(#dragmode = False,
+                           height = 600,
+                           width = 900
+                           )
+    fig_town.update_traces(marker_opacity=0.2, selector=dict(type='choropleth'),
+                           hovertemplate = "<b> %{custom_data[0]} </b>")
     fig_town.update_geos(center=center,
                          projection= {'scale':400},
                          visible=False)
+    #We add a geographical scatter plot of the differents sites
     fig_sites = px.scatter_geo(sites_df,
                               lat='Latitude',
                               lon='Longitude',
-                              color = 'Site_type',
+                              color = 'Description',
                               size = 'Area_m2',
-                              hover_data = ['Id','Site_type','Area_m2'],
-                              custom_data = ['Id','Site_type','Area_m2'],
+                              hover_data = ['Description','Area_m2'],
+                              custom_data = ['Description','Area_m2'],
                               color_discrete_map = my_colorscale)
+    
+    fig_sites.update_traces(hovertemplate = "<b>%{customdata[0]}</b><br>size of the site : %{customdata[1]} m² <extra></extra>")
+    # We add the scatterplot data to the cloropleth map
     for i in range(len(fig_sites.data)):
-        fig_town.add_trace(fig_sites.data[i])    
+        fig_town.add_trace(fig_sites.data[i])
+    # We update the layout to properly display the legend
+    fig_town.update_layout(legend=dict(
+                                    orientation="v",
+                                    yanchor="middle",
+                                    y=0.5,
+                                    xanchor="right",
+                                    x=1,
+                                    bordercolor = 'black',
+                                    borderwidth = 2
+                                    ))
     return fig_town
 
 def get_bar_chart_town(df,town_name):
-    title = "Evolution of solar pannels instalations and waste disposal areas in "+town_name
+    title = "Evolution of solar pannels instalations and waste disposal areas <br> in "+town_name
     fig = px.bar(df,
                  x='Year',
                  y='Area_m2',
                  color='Site_type',
+                 labels={'Site_type':''},
                  barmode='group',
                  title=title,
-                 text = "Area_m2")
+                 text = "Area_m2",
+                 custom_data=['Area_m2','Site_type','Year'])
     fig.update_layout(
-        yaxis=go.layout.YAxis(title = 'Total area covered by sites (m²)'
-            )
+        yaxis=go.layout.YAxis(title = 'Total area covered by sites (m²)'),
+        height = 600,
+        width = 600
         )
+    fig.update_traces(
+        hovertemplate = "there is %{customdata[0]} m² <br>of %{customdata[1]} <br>in %{customdata[2]}")
     return fig

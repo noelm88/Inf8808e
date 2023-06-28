@@ -94,149 +94,180 @@ town_stat_example = preprocess.get_municipal_stat_data(Sites_map_df, town_name_e
 template.create_custom_theme()
 template.set_default_theme()
 
+
+
 app.layout = html.Div(className='content', children=[
     html.Header(children=[
         html.H1('Reconstruction of the Fukushima Prefecture'),
         html.H2('In 2022 and 2023')
     ]),
-    html.Main(className='viz-container', children=[
-        dcc.Graph(
-            id='bar_chart_global',
-            className='graph',
-            figure=map_vis.get_bar_chart_town(Global_stat_df,'the Fukushima Prefecture'),
-            config=dict(
+    html.Div(className='viz-container',
+             style = {'display':'grid','font-family': "Arial"},
+             children=[
+        #first row
+        html.Div(
+            style={'display':'grid'},
+            children=[
+            dcc.Markdown('''
+                ### Global evolution
+                
+                We can see an augmentation of the surface covered by solar pannels by 5.000.000 m²
+                and a decrease in the total area used for waste disposal by 300.000 m²
+                
+                         ''',
+                id='global_text',
+                style={'display':'inline'}),
+            dcc.Graph(
+                id='bar_chart_global',
+                className='graph',
+                figure=map_vis.get_bar_chart_town(Global_stat_df,'the Fukushima Prefecture'),
+                config=dict(
                 scrollZoom=False,
                 showTips=False,
                 showAxisDragHandles=False,
                 doubleClick=False,
-                displayModeBar=False
-            )
-        ),
-        dcc.Graph(
-            id='heatmapsolar2022',
-            className='graph',
-            figure=map_vis.get_map(
-                Municipal_df, 
-                Fukushima_data, 
-                px.colors.sequential.Greens,
-                "solar2022",
-                "Solar instalations per municipality in 2022 m²"),
-            config=dict(
-                scrollZoom=False,
-                showTips=False,
-                showAxisDragHandles=False,
-                doubleClick=False,
-                displayModeBar=False
-            )
-        ),
-        dcc.Graph(
-            id='heatmapsolar2023',
-            className='graph',
-            figure=map_vis.get_map(
-                Municipal_df,
-                Fukushima_data,
-                px.colors.sequential.Greens,
-                "solar2023",
-                "Solar instalations per municipality in 2023 m²"),
-            config=dict(
-                scrollZoom=False,
-                showTips=False,
-                showAxisDragHandles=False,
-                doubleClick=False,
-                displayModeBar=False
-            )
-        ),
-        dcc.Graph(
-            id='heatmapwaste2022',
-            className='graph',
-            figure=map_vis.get_map(
-                Municipal_df, 
-                Fukushima_data, 
-                px.colors.sequential.Oranges,
-                "waste2022",
-                "Waste disposal areas per municipality in 2022 m²"),
-            config=dict(
-                scrollZoom=False,
-                showTips=False,
-                showAxisDragHandles=False,
-                doubleClick=False,
-                displayModeBar=False
-            )
-        ),
-        dcc.Graph(
-            id='heatmapwaste2023',
-            className='graph',
-            figure=map_vis.get_map(
-                Municipal_df, 
-                Fukushima_data, 
-                px.colors.sequential.Oranges,
-                "waste2023",
-                "Waste disposal areas per municipality in 2023 m²"),
-            config=dict(
-                scrollZoom=False,
-                showTips=False,
-                showAxisDragHandles=False,
-                doubleClick=False,
-                displayModeBar=False
-            )
-        ),
-        dcc.Graph(
-            id='site_scatter',
-            className='graph',
-            #figure=map_vis.get_empty_figure(),
-            figure=map_vis.get_scatter_plot(town_sites_example,center_example,town_name_example,Fukushima_data),
-            config=dict(
-                scrollZoom=False,
-                showTips=False,
-                showAxisDragHandles=False,
-                doubleClick=False,
-                displayModeBar=False
-            )
-        ),
-        dcc.Graph(
-            id='bar_chart_local',
-            className='graph',
-            figure=map_vis.get_bar_chart_town(town_stat_example,town_name_example),
-            config=dict(
-                scrollZoom=False,
-                showTips=False,
-                showAxisDragHandles=False,
-                doubleClick=False,
-                displayModeBar=False
-            )
-        )
+                displayModeBar=False,
+                style={'display':'inline'}
+            ))]),        
+        #second row
+        html.Div(
+                style = {'display':'block'},
+                children=[
+                #first column of second row
+                html.Div(
+                    style={'display':'inline'},
+                    children=[
+                         dcc.Graph(
+                             id='map_solar2022',
+                             className='graph',
+                             figure=map_vis.get_map(
+                                 Municipal_df, 
+                                 Fukushima_data, 
+                                 px.colors.sequential.Greens,
+                                 "solar2022",
+                                 "Solar instalations per municipality in 2022 m²"),
+                             config=dict(
+                                 scrollZoom=False,
+                                 showTips=False,
+                                 showAxisDragHandles=False,
+                                 doubleClick=False,
+                                 displayModeBar=False
+                                 )
+                         ),
+                         dcc.Graph(
+                             id='map_solar2023',
+                             className='graph',
+                             figure=map_vis.get_map(
+                                 Municipal_df,
+                                 Fukushima_data,
+                                 px.colors.sequential.Greens,
+                                 "solar2023",
+                                 "Solar instalations per municipality in 2023 m²"),
+                             config=dict(
+                                 scrollZoom=False,
+                                 showTips=False,
+                                 showAxisDragHandles=False,
+                                 doubleClick=False,
+                                 displayModeBar=False
+                                 )
+                             ),
+                         ]),
+                #second column of second row
+                html.Div(
+                    style={'display':'inline'},
+                    children = [
+                        dcc.Graph(
+                            id='map_waste2022',
+                            className='graph',
+                            figure=map_vis.get_map(
+                                Municipal_df, 
+                                Fukushima_data, 
+                                px.colors.sequential.Oranges,
+                                "waste2022",
+                                "Waste disposal areas per municipality in 2022 m²"),
+                            config=dict(
+                                scrollZoom=False,
+                                showTips=False,
+                                showAxisDragHandles=False,
+                                doubleClick=False,
+                                displayModeBar=False
+                                )
+                            ),
+                        dcc.Graph(
+                            id='map_waste2023',
+                            className='graph',
+                            figure=map_vis.get_map(
+                                Municipal_df, 
+                                Fukushima_data, 
+                                px.colors.sequential.Oranges,
+                                "waste2023",
+                                "Waste disposal areas per municipality in 2023 m²"),
+                            config=dict(
+                                scrollZoom=False,
+                                showTips=False,
+                                showAxisDragHandles=False,
+                                doubleClick=False,
+                                displayModeBar=False
+                                )
+                            )
+                        ]),
+                ]),
+        #third row
+        html.Div(children=[
+            dcc.Graph(
+                id='site_scatter',
+                className='graph',
+                #figure=map_vis.get_empty_figure(town_name_example),
+                figure=map_vis.get_scatter_plot(town_sites_example,center_example,town_name_example,Fukushima_data),
+                config=dict(
+                    scrollZoom=False,
+                    showTips=False,
+                    showAxisDragHandles=False,
+                    doubleClick=False,
+                    displayModeBar=False
+                    )
+                ),
+            dcc.Graph(
+                id='bar_chart_local',
+                className='graph',
+                figure=map_vis.get_bar_chart_town(town_stat_example,town_name_example),
+                config=dict(
+                    scrollZoom=False,
+                    showTips=False,
+                    showAxisDragHandles=False,
+                    doubleClick=False,
+                    displayModeBar=False
+                    )
+                )
+            ])
+        ])
     ])
-])
 
 
 @app.callback(
-    Output('site_scatter', 'figure'),
-    [Input('heatmap', 'clickData')]
+    [Output('site_scatter', 'figure'),
+     Output('bar_chart_local','figure')],
+    [Input('map_solar2022', 'clickData'),
+     Input('map_solar2023', 'clickData'),
+     Input('map_waste2022', 'clickData'),
+     Input('map_waste2023', 'clickData')]
 )
-def heatmap_clicked(click_data):
+
+def update_scatterplot(click_data):
     '''
         When a cell in the heatmap is clicked, updates the
-        line chart to show the data for the corresponding
-        neighborhood and year. If there is no data to show,
-        displays a message.
+        bar chart and the scatter chart to show the data for 
+        the corresponding municipality
 
-        Args:
-            The necessary inputs and states to update the
-            line chart.
-        Returns:
-            The necessary output values to update the line
-            chart.
     '''
-    if click_data is None or click_data['points'][0]['z'] == 0:
+    print(click_data)
+    if click_data is None :
         fig = map_vis.get_empty_figure()
         return fig
 
-    lat = click_data['points'][0]['y']
-    long = click_data['points'][0]['x']
-    points= [[lat,long]] #ugly but it was in that way in the geojsons files
-    town_name = preprocess.find_municipality(points,Prefecture_data)
+    town_name = click_data['points'][0]['location']
     if town_name =='no town found':
-        fig = map_vis.get_empty_figure()
+        fig = map_vis.get_empty_figure(town_name)
         return fig
     else :
         town_sites,center = preprocess.get_municipal_data(Sites_df,Prefecture_data,town_name)
