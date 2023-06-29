@@ -15,6 +15,7 @@ import dash_html_components as html
 import dash_core_components as dcc
 import plotly.express as px
 from dash.dependencies import Input, Output
+from dash.exceptions import PreventUpdate
 
 import pandas as pd
 import json
@@ -214,13 +215,15 @@ app.layout = html.Div(className='content', children=[
                 ]),
         #third row
         html.Div(children=[
+            html.Div([dcc.Dropdown(id='town_selector',
+                         options=Sites_map_df['Municipality'].unique(),
+                         value='Okuma Machi')]),
             dcc.Graph(
                 id='site_scatter',
-                className='graph',
                 #figure=map_vis.get_empty_figure(town_name_example),
                 figure=map_vis.get_scatter_plot(town_sites_example,center_example,town_name_example,Fukushima_data),
                 config=dict(
-                    scrollZoom=False,
+                    scrollZoom=True,
                     showTips=False,
                     showAxisDragHandles=False,
                     doubleClick=False,
@@ -229,7 +232,6 @@ app.layout = html.Div(className='content', children=[
                 ),
             dcc.Graph(
                 id='bar_chart_local',
-                className='graph',
                 figure=map_vis.get_bar_chart_town(town_stat_example,town_name_example),
                 config=dict(
                     scrollZoom=False,
@@ -238,38 +240,28 @@ app.layout = html.Div(className='content', children=[
                     doubleClick=False,
                     displayModeBar=False
                     )
-                )
+                ),
             ])
         ])
     ])
 
 
-@app.callback(
-    [Output('site_scatter', 'figure'),
-     Output('bar_chart_local','figure')],
-    [Input('map_solar2022', 'clickData'),
-     Input('map_solar2023', 'clickData'),
-     Input('map_waste2022', 'clickData'),
-     Input('map_waste2023', 'clickData')]
+@app.callback(Output('site_scatter', 'figure'),
+              Input('town_selector', 'value')
 )
-
-def update_scatterplot(click_data):
+def update_scatterplot(town_name):
     '''
         When a cell in the heatmap is clicked, updates the
         bar chart and the scatter chart to show the data for 
         the corresponding municipality
 
     '''
-    print(click_data)
-    if click_data is None :
-        fig = map_vis.get_empty_figure()
-        return fig
-
-    town_name = click_data['points'][0]['location']
     if town_name =='no town found':
-        fig = map_vis.get_empty_figure(town_name)
-        return fig
+        fig_scatter = map_vis.get_empty_figure(town_name)
+        fig_bar = map_vis.get_empty_figure(town_name)
     else :
         town_sites,center = preprocess.get_municipal_data(Sites_df,Prefecture_data,town_name)
-        town_fig=map_vis.get_scatter_plot(town_sites,center,town_name,Fukushima_data)
-    return( town_fig)
+        town_stat = preprocess.get_municipal_stat_data(Sites_map_df, town_name)
+        fig_scatter=map_vis.get_scatter_plot(town_sites,center,town_name,Fukushima_data)
+        fig_bar = map_vis.get_bar_chart_town(town_stat,town_name)
+    return(fig_scatter)

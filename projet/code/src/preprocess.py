@@ -107,7 +107,6 @@ def get_global_stat_data(my_df):
     site_type = {'solar2022':'solar pannels','solar2023':'solar pannels','waste2022':'waste disposal areas', 'waste2023':'waste disposal areas'}
     df['Year']=[year[x] for x in df['Site_type']]
     df['Site_type']=[site_type[x] for x in df['Site_type']]
-    print(df)
     return df
 
      
