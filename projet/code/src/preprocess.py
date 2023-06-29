@@ -3,33 +3,6 @@
 '''
 import pandas as pd
 import numpy as np
-import json
-import matplotlib.path as mplPath
-
-def is_inside(point,polygon):
-    '''
-    This function check wether or not a point is inside a polygon using Path
-    '''
-    bbPath = mplPath.Path(polygon)
-    return(bbPath.contains_point(point))
-
-def find_municipality(points,towns_data):
-    '''
-    this function useb the position of the site and the geojson 
-    of the muncipalities to determine in wich town is the site
-    '''
-    municipality = 'no town found'
-    for town in towns_data['features']:
-        for point in points:
-            if is_inside(point,town['geometry']['coordinates'][0]):
-                municipality = town['properties']['ward_en']
-    return(municipality)
-
-
-def find_lat(polygon):
-    return(np.mean(polygon[0][0],axis=0)[1])
-def find_long(polygon):
-    return(np.mean(polygon[0][0],axis=0)[0])
 
 def to_df(geo_data, site_type):
     '''
@@ -69,9 +42,9 @@ def get_municipal_site_data(sites_df,towns_geojson,town_name='Nishigo Mura'):
     hoverdict={'solar_still':'solar pannels installed before 07/2022',
                'solar_new':'solar pannels installed since 07/2022',
                'solar_removed':'solar pannels removed since 07/2022',
-               'waste_new':'waste disposal areas installed since 07/2022',
-               'waste_still':'waste disposal areas installed before 07/2022',
-               'waste_removed':'waste disposal areas removed since 07/2022'
+               'waste_new':'waste deposits installed since 07/2022',
+               'waste_still':'waste deposits installed before 07/2022',
+               'waste_removed':'waste deposits removed since 07/2022'
                }
     
     #We select only the sites which are in selected municipality

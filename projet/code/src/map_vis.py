@@ -54,6 +54,8 @@ def get_empty_figure(name):
     fig.add_shape(
         type="rect",
         fillcolor="LightGray",
+        height=  600,
+        width = 900
     )
     return(fig)
 
@@ -62,9 +64,9 @@ def get_scatter_plot(sites_df,center,town_name,towns_data):
     my_colorscale = {'solar pannels installed since 07/2022':'#16FF32',
                      'solar pannels installed before 07/2022':'#479B55',
                      'solar pannels removed since 07/2022':'#325A9B',
-                     'waste disposal areas installed since 07/2022':'#FD3216',
-                     'waste disposal areas installed before 07/2022':'#FF9619',
-                     'waste disposal areas removed since 07/2022':'#9D755D'}
+                     'waste deposits installed since 07/2022':'#FD3216',
+                     'waste deposits installed before 07/2022':'#FF9619',
+                     'waste deposits removed since 07/2022':'#9D755D'}
     
     # We create a cloropleth map that highights the town we want to display
     Municipal_df = pd.DataFrame.from_dict(pd.json_normalize(towns_data['features']),orient='columns')
@@ -81,8 +83,6 @@ def get_scatter_plot(sites_df,center,town_name,towns_data):
                     title = title,
                     custom_data=['properties.ward_en']
                     )
-    fig_town.update_traces(marker_opacity=0.2, selector=dict(type='choropleth'),
-                           hovertemplate = "<b> %{customdata[0]} </b>")
     # We add a marker on the position of the fukushima daishi power plant/accident
     fig_town.add_trace(go.Scattergeo(name='Fukushima Daishi PLant',
                                 showlegend=False,
@@ -96,8 +96,10 @@ def get_scatter_plot(sites_df,center,town_name,towns_data):
     fig_town.update(layout_coloraxis_showscale=False)
     fig_town.update_layout(#dragmode = False,
                            height = 800,
-                           width = 800
+                           width = 1800
                            )
+    fig_town.update_traces(marker_opacity=0.2, selector=dict(type='choropleth'),
+                           hovertemplate = "<b> %{customdata[0]} </b>")
     fig_town.update_geos(center=center,
                          projection= {'scale':400},
                          visible=False)
@@ -107,7 +109,6 @@ def get_scatter_plot(sites_df,center,town_name,towns_data):
                               lon='Longitude',
                               color = 'Description',
                               size = 'Area_m2',
-                              size_max = 30,
                               hover_data = ['Description','Area_m2'],
                               custom_data = ['Description','Area_m2'],
                               color_discrete_map = my_colorscale)
@@ -118,15 +119,15 @@ def get_scatter_plot(sites_df,center,town_name,towns_data):
     for i in range(len(fig_sites.data)):
         fig_town.add_trace(fig_sites.data[i])
     # We update the layout to properly display the legend
-    fig_town.update_layout(legend=dict(
-                                    orientation="v",
-                                    yanchor="middle",
-                                    y=0.5,
-                                    xanchor="right",
-                                    x=1,
-                                    bordercolor = 'black',
-                                    borderwidth = 2
-                                    ))
+    fig_town.update_layout(legend=dict(font={'size':15},
+                                       orientation="v",
+                                       yanchor="middle",
+                                       y=0.5,
+                                       xanchor="right",
+                                       x=1.5,
+                                       bordercolor = 'black',
+                                       borderwidth = 2
+                                       ))
     return fig_town
 
 def get_bar_chart_town(df,town_name):
@@ -135,6 +136,7 @@ def get_bar_chart_town(df,town_name):
                  x='Year',
                  y='Area_m2',
                  color='Site_type',
+                 color_discrete_map={'solar pannels':'#479B55','waste disposal areas':'#FF9619'},
                  labels={'Site_type':''},
                  barmode='group',
                  title=title,
@@ -142,9 +144,9 @@ def get_bar_chart_town(df,town_name):
                  custom_data=['Area_m2','Site_type','Year'])
     fig.update_layout(
         yaxis=go.layout.YAxis(title = 'Total area covered by sites (m²)'),
-        height = 800,
-        width = 800
+        height = 600,
+        width = 600
         )
     fig.update_traces(
-        hovertemplate = "there is %{customdata[0]} m² <br>of %{customdata[1]} <br>in %{customdata[2]}")
+        hovertemplate = "there is %{customdata[0]} m² <br>of %{customdata[1]} <br>in %{customdata[2]} <extra></extra>")
     return fig
