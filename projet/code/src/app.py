@@ -11,10 +11,9 @@
 '''
 
 import dash
-import dash_html_components as html
-import dash_core_components as dcc
+from dash import html,dcc,Input,Output,callback
 import plotly.express as px
-from dash.dependencies import Input, Output
+
 from dash.exceptions import PreventUpdate
 
 import pandas as pd
@@ -246,8 +245,8 @@ app.layout = html.Div(className='content', children=[
     ])
 
 
-@app.callback(Output('site_scatter', 'figure'),
-              Input('town_selector', 'value')
+@callback(Output('site_scatter', 'figure'),
+          Input('town_selector', 'value')
 )
 def update_scatterplot(town_name):
     '''
